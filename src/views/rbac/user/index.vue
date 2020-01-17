@@ -45,17 +45,23 @@
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="操作">
         <template slot-scope="scope">
-          <el-button type="text" size="small"><router-link to="/rbac/system_user_detail">查看</router-link></el-button>
+          <el-button type="text" size="small"><router-link :to="'/rbac/system_user_detail/' + scope.row.id">查看</router-link></el-button>
           <el-button type="text" size="small">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <pagination
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="fetchData" />
   </div>
 </template>
 
 <script>
 
-import { getList } from '@/api/s_user/list'
+import { getList } from '@/api/s_user'
+import Pagination from '@/components/Pagination'
 
 export default {
   name: 'SystemUserIndex',
@@ -69,10 +75,16 @@ export default {
       return statusMap[status]
     }
   },
+  components: { Pagination },
   data() {
     return {
       list: null,
-      listLoading: true
+      listLoading: true,
+      total: 0,
+      listQuery: {
+        page: 1,
+        limit: 10
+      }
     }
   },
   created() {
@@ -83,6 +95,7 @@ export default {
       this.listLoading = true
       getList().then(response => {
         this.list = response.data.data
+        this.total = response.data.total
         this.listLoading = false
       })
     }

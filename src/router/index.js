@@ -69,9 +69,10 @@ export const constantRoutes = [
         meta: { title: '系统用户', icon: 'table' }
       },
       {
-        path: 'system_user_detail',
+        path: 'system_user_detail/:id',
         name: 'system_user_detail',
         component: () => import('@/views/rbac/user/detail'),
+        meta: { title: '用户详情', icon: '' },
         hidden: true
       },
       {
