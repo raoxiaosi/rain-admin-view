@@ -52,7 +52,20 @@ export const constantRoutes = [
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
-    }]
+    },
+    {
+      path: 'self/person_info',
+      component: () => import('@/views/self/PersonInfo'),
+      meta: { title: '个人中心' },
+      hidden: true
+    },
+    {
+      path: 'self/update_pwd',
+      component: () => import('@/views/self/UpdatePwd'),
+      meta: { title: '修改密码' },
+      hidden: true
+    }
+    ]
   },
 
   {
@@ -66,26 +79,26 @@ export const constantRoutes = [
         path: 'system_user',
         name: 'SystemUserIndex',
         component: () => import('@/views/rbac/user/index'),
-        meta: { title: '系统用户', icon: 'table' }
+        meta: { title: '系统用户' }
       },
       {
         path: 'system_user_detail/:id',
         name: 'system_user_detail',
         component: () => import('@/views/rbac/user/detail'),
-        meta: { title: '用户详情', icon: '' },
+        meta: { title: '用户详情' },
         hidden: true
       },
       {
         path: 'role',
         name: 'RoleIndex',
         component: () => import('@/views/rbac/role/index'),
-        meta: { title: '角色管理', icon: 'tree' }
+        meta: { title: '角色管理' }
       },
       {
         path: 'permission',
         name: 'PermissionIndex',
         component: () => import('@/views/rbac/permission/index'),
-        meta: { title: '权限管理', icon: 'tree' }
+        meta: { title: '权限管理' }
       }
     ]
   },

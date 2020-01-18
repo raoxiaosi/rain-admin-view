@@ -1,39 +1,39 @@
 <template>
   <div class="app-container">
-    <el-row>
-      <el-col :span="7" class="txt-right avatar"><el-avatar :src="user_detail.avatar"/></el-col>
+    <el-row class="row-item">
+      <el-col :span="2" class="txt-left avatar"><el-avatar :src="user_detail.avatar" /></el-col>
     </el-row>
     <el-row class="row-item">
       <el-col :span="2" class="txt-left">用户名:</el-col>
-      <el-col :span="5" class="txt-right">{{user_detail.userName}}</el-col>
+      <el-col :span="5" class="txt-right">{{ user_detail.userName }}</el-col>
     </el-row>
     <el-row class="row-item">
       <el-col :span="2" class="txt-left">昵称:</el-col>
-      <el-col :span="5" class="txt-right">{{user_detail.nickName}}</el-col>
+      <el-col :span="5" class="txt-right">{{ user_detail.nickName }}</el-col>
     </el-row>
     <el-row class="row-item">
       <el-col :span="2" class="txt-left">手机号码:</el-col>
-      <el-col :span="5" class="txt-right">{{user_detail.phone}}</el-col>
+      <el-col :span="5" class="txt-right">{{ user_detail.phone }}</el-col>
     </el-row>
     <el-row class="row-item">
       <el-col :span="2" class="txt-left">登录密码:</el-col>
-      <el-col :span="5" class="txt-right"><el-button type="text" size="small">重置密码</el-button></el-col>
+      <el-col :span="5" class="txt-right"><el-button type="text" size="small" @click="reset_pwd">重置密码</el-button></el-col>
     </el-row>
     <el-row class="row-item">
       <el-col :span="2" class="txt-left">邮箱:</el-col>
-      <el-col :span="5" class="txt-right">{{user_detail.email}}</el-col>
+      <el-col :span="5" class="txt-right">{{ user_detail.email }}</el-col>
     </el-row>
     <el-row class="row-item">
       <el-col :span="2" class="txt-left">状态:</el-col>
-      <el-col :span="5" class="txt-right">{{user_detail.status}}</el-col>
+      <el-col :span="5" class="txt-right">{{ user_status(user_detail.status) }}</el-col>
     </el-row>
     <el-row class="row-item">
       <el-col :span="2" class="txt-left">注册时间:</el-col>
-      <el-col :span="5" class="txt-right">{{user_detail.createTime}}</el-col>
+      <el-col :span="5" class="txt-right">{{ user_detail.createTime }}</el-col>
     </el-row>
     <el-row class="row-item">
       <el-col :span="2" class="txt-left">最近修改时间:</el-col>
-      <el-col :span="5" class="txt-right">{{user_detail.updateTime}}</el-col>
+      <el-col :span="5" class="txt-right">{{ user_detail.updateTime }}</el-col>
     </el-row>
     <el-row class="row-item">
       <el-col :span="2" class="txt-left">角色:</el-col>
@@ -41,22 +41,24 @@
         <el-tag
           v-for="role in user_detail.userRoleVOList"
           :key="role.roleName"
+          size="small"
           closable
-          :type="role.id">
-          {{role.roleName}}
+          type="danger"
+        >
+          {{ role.roleName }}
         </el-tag>
       </el-col>
     </el-row>
-    <el-divider></el-divider>
+    <el-divider />
     <el-row>
       <el-col :span="12">
         <div class="block">
           <el-timeline>
-            <el-timeline-item v-for="log in login_logout_log" :key="log.createTime" v-bind:timestamp="log.createTime" placement="top">
+            <el-timeline-item v-for="log in login_logout_log" :key="log.createTime" :timestamp="log.createTime" placement="top">
               <el-card>
-                <h4>{{log.country}} {{log.province}} {{log.city}} {{log.isp}}</h4>
-                <p>ip: {{log.ip}} </p>
-                <p>操作:{{operation(log.type)}}</p>
+                <h4>{{ log.country }} {{ log.province }} {{ log.city }} {{ log.isp }}</h4>
+                <p>ip: {{ log.ip }} </p>
+                <p>操作:{{ operation(log.type) }}</p>
               </el-card>
             </el-timeline-item>
           </el-timeline>
@@ -67,7 +69,8 @@
 </template>
 <script>
 
-import { getDetail } from '@/api/s_user'
+import { getDetail } from '@/api/rbac/s_user'
+import { resetPwd } from '@/api/rbac/s_user'
 import { loginOutLog } from '@/api/log'
 
 export default {
@@ -112,6 +115,38 @@ export default {
         default:
           return ''
       }
+    },
+    user_status(status) {
+      switch (status) {
+        case 1:
+          return '启用'
+        case 2:
+          return '禁用'
+        case 3:
+          return '锁定'
+        case 4:
+          return '删除'
+      }
+    },
+    reset_pwd() {
+      this.$prompt('新密码', '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        showInput: true,
+        inputType: 'password',
+        inputPlaceholder: '请输入密码',
+        inputPattern: /^(\w){6,20}$/,
+        inputErrorMessage: '请输入6-20个字符'
+      }).then(({ value }) => {
+        resetPwd(this.user_detail.id, value).then(response => {
+          if (response.code === 200) {
+            this.$message({
+              type: 'success',
+              message: response.message
+            })
+          }
+        })
+      })
     }
   }
 }
@@ -134,7 +169,6 @@ export default {
     margin-left: 50px;
   }
   .avatar{
-    margin-left: 100px;
     height: 60px;
   }
 </style>

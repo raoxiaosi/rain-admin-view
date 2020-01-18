@@ -60,7 +60,7 @@
 
 <script>
 
-import { getList } from '@/api/s_user'
+import { getList } from '@/api/rbac/s_user'
 import Pagination from '@/components/Pagination'
 
 export default {

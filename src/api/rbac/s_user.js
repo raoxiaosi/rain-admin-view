@@ -16,3 +16,14 @@ export function getDetail(param) {
     method: 'get'
   })
 }
+
+// 重置密码
+export function resetPwd(userId, pwd) {
+  return request({
+    url: '/user/manager/system_user/reset_password/' + userId,
+    method: 'post',
+    params: {
+      password: pwd
+    }
+  })
+}
