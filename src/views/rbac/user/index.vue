@@ -54,7 +54,8 @@
       :total="total"
       :page.sync="listQuery.page"
       :limit.sync="listQuery.limit"
-      @pagination="fetchData" />
+      @pagination="fetchData"
+    />
   </div>
 </template>
 
@@ -94,7 +95,7 @@ export default {
     fetchData() {
       this.listLoading = true
       getList().then(response => {
-        this.list = response.data.data
+        this.list = response.data.list
         this.total = response.data.total
         this.listLoading = false
       })
