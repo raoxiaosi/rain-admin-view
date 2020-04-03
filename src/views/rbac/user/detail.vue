@@ -97,7 +97,7 @@ export default {
     },
     loginLogoutLog(userId) {
       loginOutLog(userId, 'admin').then(response => {
-        this.login_logout_log = response.data.data
+        this.login_logout_log = response.data.list
       })
     },
     operation(type) {
